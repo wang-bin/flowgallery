@@ -431,8 +431,15 @@
     duration: 900,            // animation duration (higher value = slower speed)
     easing: 'linear',
     enableKeyNavigation: true,   // enables forward/backward arrow keys for next/previous navigation
-    forceHeight: false,
-    forceWidth: false,
+    contentWidth: 980,
+    contentHeight: 550,
+    /*
+		orignal: contentWidth/Height will be image size
+		stretch - the image is scaled to fit
+		preserveAspectFit: the image is scaled uniformly to fit without cropping
+		preserveAspectCrop - the image is scaled uniformly to fill, cropping if necessary
+    */
+    fillMode: "original",
     forwardOnActiveClick: true, // should clicking on active image, show next image?
     imagePadding: 0,         // border of active image
     loadingClass: "loading", // css class applied to <li> elements of loading images
@@ -547,15 +554,30 @@
     function initImageDimensions() {
       var img = $img.get(0);
 
+
       // update full image dimensions
       if(typeof img.naturalWidth !== 'undefined') {
-        self.w  = options.forceWidth || img.naturalWidth || img.width;
-        self.h = options.forceHeight || img.naturalHeight || img.height;
+        self.w  = img.naturalWidth || img.width;
+        self.h = img.naturalHeight || img.height;
       } else {
         var tmpImg = new Image();
         tmpImg.src = $img.attr('src');
         self.w = tmpImg.width;
         self.h = tmpImg.height;
+      }
+      var r0 = self.w/self.h;
+      var r1 = options.contentWidth/options.contentHeight;
+      if (options.fillMode === "stretch") {
+        self.w = options.contentWidth;
+        self.h = options.contentHeight;
+      } else if (options.fillMode === "preserveAspectFit") {
+        if (self.w/self.h > options.contentWidth/options.contentHeight) {
+          self.w = options.contentWidth;
+          self.h = self.w / r0;
+        } else {
+          self.h = options.contentHeight;
+          self.w = r0 * self.h;
+        }
       }
 
       // update thumbnail dimensions
