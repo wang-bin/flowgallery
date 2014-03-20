@@ -1,4 +1,3 @@
-
 # FlowGallery #
 
 jQuery plugin for image galleries with a cover flow effect.
@@ -28,6 +27,25 @@ $("#gallery").flowGallery({
 </pre>
 
 There are many additional configuration options, see project website for more details: http://flowgallery.org.
+
+#### Modified By wang-bin
+
+I remove `forceWidth` and `forceHeight` options. Instead, I add `contentWidth`, `contentHeight` and `fillMode`. `contentWidth` and `contentHeight` is the maximum size the image will show. `fillMode` specifies how the image show in the content rect. `fillMode` can be
+
+- `"original"`: the image's original size
+- `"stretch"`: the image is scaled to fit the content rect
+- `"preserveAspectFit"`: the image is scaled uniformly to fit without cropping
+
+example:
+
+    $('#gallery').flowgallery({
+        easing: 'easeOutCubic',
+        contentWidth: 800,
+        contentHeight: 600,
+        fillMode: "preserveAspectFit"
+      });
+    });
+
 
 ## Dependencies ##
 
